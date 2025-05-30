@@ -31,25 +31,26 @@ class PracticeViewModel(
         loadPracticeWords()
     }
 
+    // Lấy 10 learned_word dưới level 5, rồi lấy từng vocabulary từ id_vocabulary
     fun loadPracticeWords() {
         _uiState.value = PracticeUiState(loading = true)
         viewModelScope.launch {
             try {
                 val learnedRes = repository.getLearnedWordsUnder5(UserSession.userId)
-                val vocabRes = repository.getVocabularies(UserSession.userId)
-                if (learnedRes.success && learnedRes.data != null &&
-                    vocabRes.success && vocabRes.data != null
-                ) {
-                    val vocabMap = vocabRes.data.associateBy { it.id_vocabulary }
-                    val pairs = learnedRes.data.mapNotNull { lw ->
-                        vocabMap[lw.id_vocabulary]?.let { v -> lw to v }
+                if (learnedRes.success && learnedRes.data != null && learnedRes.data.isNotEmpty()) {
+                    val pairs = mutableListOf<Pair<LearnedWord, Vocabulary>>()
+                    for (lw in learnedRes.data.take(10)) {
+                        val vocabRes = repository.getVocabularyById(lw.id_vocabulary)
+                        if (vocabRes.success && vocabRes.data != null) {
+                            pairs.add(lw to vocabRes.data)
+                        }
                     }
                     _uiState.value = PracticeUiState(
                         loading = false,
                         pairs = pairs
                     )
                 } else {
-                    _uiState.value = PracticeUiState(loading = false, error = "Không lấy được dữ liệu")
+                    _uiState.value = PracticeUiState(loading = false, error = "Không có dữ liệu luyện tập")
                 }
             } catch (e: Exception) {
                 _uiState.value = PracticeUiState(loading = false, error = "Lỗi mạng")
