@@ -71,6 +71,7 @@ dependencies {
     implementation ("com.squareup.okhttp3:logging-interceptor:4.12.0")
     implementation ("androidx.compose.material:material-icons-extended:1.6.3")
 
+    implementation("androidx.compose.material:material-icons-extended:1.6.3")
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)

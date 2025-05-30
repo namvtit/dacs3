@@ -1,19 +1,23 @@
 package com.example.dac.ui.screen
 
+import android.content.Context
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.VolumeUp
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 
@@ -34,6 +38,11 @@ fun FlashCard3D(
         animationSpec = tween(durationMillis = 350),
         label = "rotation"
     )
+    val context = LocalContext.current
+    val speaker = remember { FlashCardSpeaker(context) }
+    DisposableEffect(Unit) {
+        onDispose { speaker.shutdown() }
+    }
 
     Box(
         modifier = Modifier
@@ -54,7 +63,8 @@ fun FlashCard3D(
                 part = part,
                 contextEnglish = contextEnglish,
                 level = level,
-                modifier = Modifier.alpha(1f - (rotation / 90f))
+                modifier = Modifier.alpha(1f - (rotation / 90f)),
+                onSpeak = { speaker.speak(word) }
             )
         } else {
             BackCardContent(
@@ -75,13 +85,25 @@ private fun FrontCardContent(
     part: String,
     contextEnglish: String,
     level: String,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onSpeak: () -> Unit
 ) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = modifier.padding(16.dp)
     ) {
-        Text(word, style = MaterialTheme.typography.headlineMedium, fontWeight = FontWeight.Bold)
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            Text(word, style = MaterialTheme.typography.headlineMedium, fontWeight = FontWeight.Bold)
+            Spacer(Modifier.width(8.dp))
+            Icon(
+                imageVector = Icons.Default.VolumeUp,
+                contentDescription = "Speak",
+                tint = Color(0xFF6A1B9A),
+                modifier = Modifier
+                    .size(28.dp)
+                    .clickable { onSpeak() }
+            )
+        }
         Text(ipa, color = Color.Gray)
         Text("($part)", color = Color.Gray)
         Spacer(Modifier.height(8.dp))
