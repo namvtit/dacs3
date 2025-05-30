@@ -48,6 +48,7 @@ fun LoginScreen(
                             if (response.success && response.user != null) {
                                 if (response.user.password == password) {
                                     UserSession.userId = response.user.id_user
+                                    UserSession.userName = response.user.name
                                     onLoginSuccess()
                                 } else {
                                     errorMessage = "Sai mật khẩu!"

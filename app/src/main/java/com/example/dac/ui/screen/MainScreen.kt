@@ -39,7 +39,14 @@ fun MainScreen(navController: NavController) {
                 1 -> ExamScreen(
                     onQuiz = { navController.navigate("quiz") }
                 )
-                2 -> UserScreen()
+                2 -> UserScreen(
+                    onLogout = {
+                        // Reset navigation stack về login khi logout
+                        navController.navigate("login") {
+                            popUpTo("main") { inclusive = true }
+                        }
+                    }
+                )
             }
         }
     }
