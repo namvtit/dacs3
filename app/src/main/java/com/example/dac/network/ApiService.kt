@@ -32,7 +32,7 @@ interface ApiService {
     @FormUrlEncoded
     @POST("api.php")
     suspend fun addLearnedWord(
-        @Field("action") action: String = "add_learned_word",
+        @Field("action") action: String = "add_learned_words",
         @Field("id_user") idUser: Int,
         @Field("id_vocabulary") idVocabulary: Int,
         @Field("level") level: Int,
@@ -73,7 +73,7 @@ interface ApiService {
     @FormUrlEncoded
     @POST("api.php")
     suspend fun addTest(
-        @Field("action") action: String = "add_test",
+        @Field("action") action: String = "add_tests",
         @Field("id_user") idUser: Int,
         @Field("score") score: Int,
         @Field("date") date: String
