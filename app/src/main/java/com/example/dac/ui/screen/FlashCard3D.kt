@@ -64,7 +64,8 @@ fun FlashCard3D(
                 contextEnglish = contextEnglish,
                 level = level,
                 modifier = Modifier.alpha(1f - (rotation / 90f)),
-                onSpeak = { speaker.speak(word) }
+                onSpeak = { speaker.speak(word) },
+                onSpeakContext = { speaker.speak(contextEnglish) }
             )
         } else {
             BackCardContent(
@@ -86,7 +87,8 @@ private fun FrontCardContent(
     contextEnglish: String,
     level: String,
     modifier: Modifier = Modifier,
-    onSpeak: () -> Unit
+    onSpeak: () -> Unit,
+    onSpeakContext: () -> Unit
 ) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -97,7 +99,7 @@ private fun FrontCardContent(
             Spacer(Modifier.width(8.dp))
             Icon(
                 imageVector = Icons.Default.VolumeUp,
-                contentDescription = "Speak",
+                contentDescription = "Speak word",
                 tint = Color(0xFF6A1B9A),
                 modifier = Modifier
                     .size(28.dp)
@@ -110,7 +112,18 @@ private fun FrontCardContent(
         Text("Level: $level", color = Color(0xFF6A1B9A))
         Spacer(Modifier.height(8.dp))
         Text("Context (En):", fontWeight = FontWeight.Bold)
-        Text(contextEnglish)
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            Text(contextEnglish, modifier = Modifier.weight(1f))
+            Spacer(Modifier.width(8.dp))
+            Icon(
+                imageVector = Icons.Default.VolumeUp,
+                contentDescription = "Speak context",
+                tint = Color(0xFF6A1B9A),
+                modifier = Modifier
+                    .size(24.dp)
+                    .clickable { onSpeakContext() }
+            )
+        }
     }
 }
 
