@@ -32,4 +32,7 @@ class AppRepository {
 
     suspend fun addTest(idUser: Int, score: Int, date: String) =
         api.addTest(idUser = idUser, score = score, date = date)
+
+    suspend fun getVocabularyById(idVocabulary: Int) =
+        api.getVocabularyById(idVocabulary = idVocabulary)
 }

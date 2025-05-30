@@ -78,6 +78,12 @@ interface ApiService {
         @Field("score") score: Int,
         @Field("date") date: String
     ): ApiResponse
+    @GET("api.php")
+    suspend fun getVocabularyById(
+        @Query("action") action: String = "get_vocabulary_by_id",
+        @Query("id_vocabulary") idVocabulary: Int
+    ): VocabularyByIdResponse
+
 }
 
 // Các response mở rộng
@@ -85,3 +91,4 @@ data class VocabularyListResponse(val success: Boolean, val data: List<Vocabular
 data class LearnedWordListResponse(val success: Boolean, val data: List<LearnedWord>?)
 data class TestListResponse(val success: Boolean, val data: List<Test>?)
 data class CountLevelResponse(val success: Boolean, val data: Map<String, Int>?)
+data class VocabularyByIdResponse(val success: Boolean, val data: Vocabulary?)
