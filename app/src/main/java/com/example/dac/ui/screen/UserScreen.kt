@@ -15,9 +15,8 @@ fun UserScreen(
 ) {
     val uiState by viewModel.uiState.collectAsState()
     val maxPerLevel = 50
-    val levels = listOf("A1", "A2", "B1", "B2", "C1", "C2")
 
-    // Tải dữ liệu khi lần đầu vào screen
+    // Luôn load dữ liệu mới khi vào màn User
     LaunchedEffect(Unit) {
         viewModel.loadUserData()
     }
@@ -30,32 +29,25 @@ fun UserScreen(
                 .fillMaxWidth(),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Text(text = "Xin chào, ${uiState.userName}!", style = MaterialTheme.typography.headlineMedium)
+            Text(
+                text = "Xin chào, ${uiState.userName}!",
+                style = MaterialTheme.typography.headlineMedium
+            )
             Spacer(Modifier.height(24.dp))
             when {
                 uiState.loading -> CircularProgressIndicator()
                 uiState.error != null -> Text(uiState.error!!, color = MaterialTheme.colorScheme.error)
                 else -> {
-                    levels.forEach { level ->
-                        val value = uiState.levelCounts[level] ?: 0
-                        Column(Modifier.fillMaxWidth(), horizontalAlignment = Alignment.Start) {
-                            Text("$level: $value/$maxPerLevel")
-                            LinearProgressIndicator(
-                                progress = (value / maxPerLevel.toFloat()).coerceAtMost(1f),
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .height(16.dp)
-                            )
-                            Spacer(Modifier.height(12.dp))
-                        }
-                    }
+                    LevelBar("Level 1", uiState.level1, maxPerLevel)
+                    LevelBar("Level 2", uiState.level2, maxPerLevel)
+                    LevelBar("Level 3", uiState.level3, maxPerLevel)
+                    LevelBar("Level 4", uiState.level4, maxPerLevel)
+                    LevelBar("Level 5", uiState.level5, maxPerLevel)
                 }
             }
             Spacer(Modifier.weight(1f))
             Button(
-                onClick = {
-                    onLogout?.invoke()
-                },
+                onClick = { onLogout?.invoke() },
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(top = 24.dp)
@@ -63,5 +55,19 @@ fun UserScreen(
                 Text("Logout")
             }
         }
+    }
+}
+
+@Composable
+fun LevelBar(label: String, value: Int, max: Int) {
+    Column(Modifier.fillMaxWidth(), horizontalAlignment = Alignment.Start) {
+        Text("$label: $value/$max")
+        LinearProgressIndicator(
+            progress = { (value / max.toFloat()).coerceAtMost(1f) },
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(16.dp)
+        )
+        Spacer(Modifier.height(12.dp))
     }
 }
