@@ -19,7 +19,7 @@ interface ApiService {
     suspend fun getUser(
         @Query("action") action: String = "get_user",
         @Query("username") username: String
-    ): ApiResponse
+    ): UserResponse
 
     // 2. Lấy 10 từ vựng chưa học
     @GET("api.php")
