@@ -1,6 +1,5 @@
 package com.example.dac.data
 
-import com.example.dac.model.VocabularyL1
 import com.example.dac.model.ApiResponse
 import com.example.dac.network.ApiService
 

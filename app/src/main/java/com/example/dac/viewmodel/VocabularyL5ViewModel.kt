@@ -3,7 +3,6 @@ package com.example.dac.viewmodel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.dac.data.VocabularyL5Repository
-import com.example.dac.model.VocabularyL5
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch

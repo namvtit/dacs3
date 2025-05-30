@@ -1,6 +1,5 @@
 package com.example.dac.data
 
-import com.example.dac.model.Vocabulary
 import com.example.dac.network.ApiService
 
 class VocabularyRepository(private val api: ApiService) {
