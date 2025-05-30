@@ -1,39 +1,25 @@
-package com.example.vocabapp.ui.screen
+package com.example.dac.ui.screen
 
 import androidx.compose.foundation.layout.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.example.vocabapp.viewmodel.HomeViewModel
 
 @Composable
-fun LearnScreen(
-    onBack: () -> Unit,
-    viewModel: HomeViewModel = HomeViewModel()
-) {
-    val words = viewModel.loadNewWords()
-    Scaffold(
-        topBar = {
-            TopAppBar(
-                title = { Text("Learn New Words") },
-                navigationIcon = {
-                    IconButton(onClick = onBack) {
-                        Icon(Icons.Default.Home, contentDescription = "Back Home")
-                    }
-                }
-            )
+fun LearnScreen(onClose: () -> Unit) {
+    Box(modifier = Modifier.fillMaxSize()) {
+        IconButton(
+            onClick = onClose,
+            modifier = Modifier.align(Alignment.TopEnd).padding(16.dp)
+        ) {
+            Icon(Icons.Default.Close, contentDescription = "Close")
         }
-    ) { padding ->
-        Column(Modifier.padding(padding).padding(16.dp)) {
-            words.forEach { word ->
-                Card(Modifier.fillMaxWidth().padding(vertical = 8.dp)) {
-                    Column(Modifier.padding(16.dp)) {
-                        Text(word.word, style = MaterialTheme.typography.titleMedium)
-                        Text(word.meaning, style = MaterialTheme.typography.bodyLarge)
-                    }
-                }
-            }
+        Box(Modifier.align(Alignment.Center)) {
+            Text("Learn Screen", style = MaterialTheme.typography.headlineMedium)
         }
     }
 }

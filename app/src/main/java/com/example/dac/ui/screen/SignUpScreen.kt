@@ -7,10 +7,11 @@ import androidx.compose.ui.*
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun LoginScreen(
-    onLoginSuccess: () -> Unit,
-    onSignUp: () -> Unit
+fun SignUpScreen(
+    onBack: () -> Unit,
+    onSignUpSuccess: () -> Unit
 ) {
+    var name by remember { mutableStateOf("") }
     var username by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
 
@@ -19,6 +20,14 @@ fun LoginScreen(
         contentAlignment = Alignment.Center
     ) {
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
+            Text("Sign Up", style = MaterialTheme.typography.headlineMedium)
+            Spacer(Modifier.height(16.dp))
+            OutlinedTextField(
+                value = name,
+                onValueChange = { name = it },
+                label = { Text("Full Name") }
+            )
+            Spacer(Modifier.height(8.dp))
             OutlinedTextField(
                 value = username,
                 onValueChange = { username = it },
@@ -31,12 +40,18 @@ fun LoginScreen(
                 label = { Text("Password") }
             )
             Spacer(Modifier.height(16.dp))
-            Button(onClick = { onLoginSuccess() }, modifier = Modifier.fillMaxWidth()) {
-                Text("Login")
+            Button(
+                onClick = {
+                    // TODO: gọi API đăng ký tại đây, thành công thì gọi onSignUpSuccess()
+                    onSignUpSuccess()
+                },
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Text("Sign Up")
             }
             Spacer(Modifier.height(8.dp))
-            TextButton(onClick = onSignUp, modifier = Modifier.fillMaxWidth()) {
-                Text("Sign Up")
+            TextButton(onClick = onBack, modifier = Modifier.fillMaxWidth()) {
+                Text("Back to Login")
             }
         }
     }

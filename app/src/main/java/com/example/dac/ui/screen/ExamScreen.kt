@@ -8,21 +8,16 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun HomeScreen(
-    onLearn: () -> Unit,
-    onPractice: () -> Unit
+fun ExamScreen(
+    onQuiz: () -> Unit
 ) {
     Column(
         Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Button(onClick = onLearn, modifier = Modifier.fillMaxWidth(0.7f)) {
-            Text("Learn")
-        }
-        Spacer(modifier = Modifier.height(24.dp))
-        Button(onClick = onPractice, modifier = Modifier.fillMaxWidth(0.7f)) {
-            Text("Practice")
+        Button(onClick = onQuiz, modifier = Modifier.fillMaxWidth(0.7f)) {
+            Text("Quiz")
         }
     }
 }
