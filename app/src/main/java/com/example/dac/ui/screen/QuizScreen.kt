@@ -34,7 +34,11 @@ fun QuizScreen(
             when {
                 uiState.loading -> CircularProgressIndicator()
                 uiState.error != null -> Text(uiState.error ?: "Lỗi", color = MaterialTheme.colorScheme.error)
-                uiState.finished || uiState.vocabularies.isEmpty() -> Text("Đã hoàn thành Quiz!")
+                uiState.finished || uiState.vocabularies.isEmpty() -> {
+                    Text("Đã hoàn thành Quiz!", style = MaterialTheme.typography.headlineSmall)
+                    Spacer(Modifier.height(12.dp))
+                    Text("Điểm của bạn: ${uiState.score}/${uiState.vocabularies.size}")
+                }
                 else -> {
                     val vocab = uiState.vocabularies[uiState.currentIndex]
                     Text(

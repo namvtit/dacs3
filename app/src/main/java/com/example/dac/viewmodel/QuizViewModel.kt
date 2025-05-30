@@ -19,7 +19,8 @@ data class QuizUiState(
     val userInput: String = "",
     val showFlashCard: Boolean = false,
     val isBack: Boolean = false,
-    val finished: Boolean = false
+    val finished: Boolean = false,
+    val score: Int = 0
 )
 
 class QuizViewModel(
@@ -67,19 +68,24 @@ class QuizViewModel(
         val vocab = state.vocabularies[state.currentIndex]
         val correct = vocab.word.trim().equals(state.userInput.trim(), ignoreCase = true)
         if (correct) {
-            // Đúng: Thêm vào learned_word level 1, chuyển sang từ tiếp theo
             val date = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date())
             viewModelScope.launch {
-                repository.addLearnedWord(
+                // Tăng level nếu đã học (update), nếu chưa có thì thêm mới level 1
+                val res = repository.updateLearnedLevel(
                     idUser = UserSession.userId,
-                    idVocabulary = vocab.id_vocabulary,
-                    level = 1,
-                    date = date
+                    idVocabulary = vocab.id_vocabulary
                 )
+                if (!res.success) {
+                    repository.addLearnedWord(
+                        idUser = UserSession.userId,
+                        idVocabulary = vocab.id_vocabulary,
+                        level = 1,
+                        date = date
+                    )
+                }
             }
-            nextWord()
+            nextWord(increaseScore = true)
         } else {
-            // Sai: hiện flashcard
             _uiState.value = state.copy(showFlashCard = true, isBack = false)
         }
     }
@@ -88,15 +94,32 @@ class QuizViewModel(
         _uiState.value = _uiState.value.copy(isBack = !_uiState.value.isBack)
     }
 
-    fun nextWord() {
+    fun nextWord(increaseScore: Boolean = false) {
         val state = _uiState.value
         val nextIdx = state.currentIndex + 1
+        val newScore = if (increaseScore) state.score + 1 else state.score
+        val finishedNow = nextIdx >= state.vocabularies.size
         _uiState.value = state.copy(
             currentIndex = nextIdx,
             userInput = "",
             showFlashCard = false,
             isBack = false,
-            finished = nextIdx >= state.vocabularies.size
+            finished = finishedNow,
+            score = newScore
         )
+        if (finishedNow) {
+            saveQuizResult(newScore)
+        }
+    }
+
+    private fun saveQuizResult(score: Int) {
+        val date = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date())
+        viewModelScope.launch {
+            repository.addTest(
+                idUser = UserSession.userId,
+                score = score,
+                date = date
+            )
+        }
     }
 }

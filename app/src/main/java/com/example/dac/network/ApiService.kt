@@ -73,7 +73,7 @@ interface ApiService {
     @FormUrlEncoded
     @POST("api.php")
     suspend fun addTest(
-        @Field("action") action: String = "add_tests",
+        @Field("action") action: String = "add_test",
         @Field("id_user") idUser: Int,
         @Field("score") score: Int,
         @Field("date") date: String
