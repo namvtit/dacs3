@@ -70,19 +70,13 @@ class QuizViewModel(
         if (correct) {
             val date = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date())
             viewModelScope.launch {
-                // Tăng level nếu đã học (update), nếu chưa có thì thêm mới level 1
-                val res = repository.updateLearnedLevel(
+                // Luôn luôn thêm mới learned_word với level = 1 khi trả lời đúng
+                repository.addLearnedWord(
                     idUser = UserSession.userId,
-                    idVocabulary = vocab.id_vocabulary
+                    idVocabulary = vocab.id_vocabulary,
+                    level = 1,
+                    date = date
                 )
-                if (!res.success) {
-                    repository.addLearnedWord(
-                        idUser = UserSession.userId,
-                        idVocabulary = vocab.id_vocabulary,
-                        level = 1,
-                        date = date
-                    )
-                }
             }
             nextWord(increaseScore = true)
         } else {
