@@ -16,6 +16,11 @@ fun ExamScreen(
     onQuiz: () -> Unit,
     viewModel: ExamViewModel = viewModel()
 ) {
+    // Mỗi lần ExamScreen được compose (mỗi lần chuyển tab vào), hàm này sẽ chạy lại
+    LaunchedEffect(Unit) {
+        viewModel.fetchTests()
+    }
+
     val uiState by viewModel.uiState.collectAsState()
 
     Column(

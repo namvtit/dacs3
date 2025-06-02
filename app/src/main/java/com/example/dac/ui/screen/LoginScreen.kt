@@ -40,6 +40,11 @@ fun LoginScreen(
             Button(
                 onClick = {
                     errorMessage = null
+                    // Validate đầu vào trước khi gửi API
+                    if (username.isBlank() || password.isBlank()) {
+                        errorMessage = "Vui lòng nhập đầy đủ thông tin!"
+                        return@Button
+                    }
                     loading = true
                     coroutineScope.launch {
                         try {
@@ -62,7 +67,7 @@ fun LoginScreen(
                         }
                     }
                 },
-                enabled = !loading && username.isNotBlank() && password.isNotBlank(),
+                enabled = !loading,
                 modifier = Modifier.fillMaxWidth()
             ) {
                 if (loading) {

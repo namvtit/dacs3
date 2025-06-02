@@ -57,6 +57,15 @@ fun SignUpScreen(
             Button(
                 onClick = {
                     errorMessage = null
+                    // Validate đầu vào trước khi gửi API
+                    if (name.isBlank() || username.isBlank() || password.isBlank()) {
+                        errorMessage = "Vui lòng nhập đầy đủ thông tin!"
+                        return@Button
+                    }
+                    if (password.length < 6) {
+                        errorMessage = "Mật khẩu phải từ 6 ký tự!"
+                        return@Button
+                    }
                     loading = true
                     coroutineScope.launch {
                         try {
@@ -77,7 +86,7 @@ fun SignUpScreen(
                         }
                     }
                 },
-                enabled = !loading && name.isNotBlank() && username.isNotBlank() && password.isNotBlank(),
+                enabled = !loading,
                 modifier = Modifier.fillMaxWidth(0.8f)
             ) {
                 if (loading) {
